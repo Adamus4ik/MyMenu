@@ -3,16 +3,17 @@
 #include <Geode/ui/ScrollLayer.hpp>
 #include <Geode/modify/CCKeyboardDispatcher.hpp>
 
-class CheatMenu : public Popup<> {
+class CheatMenu : public Popup {
     std::vector<CCLabelBMFont*> m_vals;
     static inline CheatMenu* s_open = nullptr;
 
 protected:
-    bool setup() override {
+    bool init() {
+        if (!Popup::init(400.f, 280.f)) return false;
         s_open = this;
         this->setTitle("My Menu  (TAB = close)");
         auto& reg = registry();
-        float W = m_size.width - 30.f, H = m_size.height - 70.f;
+        float W = 400.f - 30.f, H = 280.f - 70.f;
         const float ROW = 28.f;
 
         size_t headers = 0; std::string last;
@@ -102,13 +103,13 @@ protected:
     }
     void onClose(CCObject* o) override {
         s_open = nullptr;
-        Popup<>::onClose(o);
+        Popup::onClose(o);
     }
 
 public:
     static CheatMenu* create() {
         auto r = new CheatMenu();
-        if (r && r->initAnchored(400.f, 280.f)) { r->autorelease(); return r; }
+        if (r && r->init()) { r->autorelease(); return r; }
         CC_SAFE_DELETE(r);
         return nullptr;
     }

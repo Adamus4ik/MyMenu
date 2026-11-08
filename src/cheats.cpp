@@ -16,7 +16,11 @@ $execute {
     T("noclip", "Noclip", "Player");
     T("noclip_label", "Noclip Accuracy / Deaths", "Player", true);
     S("noclip_min_acc", "Die below accuracy % (0=off)", "Player", 0.f, 0.f, 100.f);
+    T("noclip_p1", "Noclip applies to Player 1", "Player", true);
+    T("noclip_p2", "Noclip applies to Player 2", "Player", true);
+    T("noclip_solid_dies", "Noclip: still die on solid blocks", "Player");
     T("safe_mode", "Auto Safe Mode", "Player", true);
+    T("safe_notify", "Safe Mode notification", "Player", true);
     T("destroy_on", "Destroy Hazards", "Player");
     S("destroy_count", "Hazards to destroy", "Player", 3.f, 1.f, 50.f);
     T("input_buffer", "Inputs buffer", "Player");
@@ -51,10 +55,19 @@ $execute {
     T("lbl_pos", "Player position", "Labels");
     T("lbl_speed", "Speed multiplier", "Labels");
     T("lbl_session", "Session deaths", "Labels");
+    T("lbl_objects", "Object count", "Labels");
+    T("lbl_mode", "Game mode", "Labels");
+    T("lbl_gravity", "Gravity direction", "Labels");
+    T("lbl_jumps", "Jumps this attempt", "Labels");
+    T("lbl_pspeed", "Player speed value", "Labels");
     T("lbl_clock", "Real clock", "Labels");
     T("lbl_right", "Labels on right side", "Labels");
     S("lbl_scale", "Label size", "Labels", 0.4f, 0.2f, 1.f);
     S("lbl_opacity", "Label opacity", "Labels", 0.6f, 0.1f, 1.f);
+    // Hotkeys (3)
+    T("hotkeys_on", "Hotkeys: F1 noclip, F2 speed, F3 hitboxes, F4 autoclick", "Hotkeys");
+    T("quick_restart", "Quick restart with R", "Hotkeys");
+    T("key_checkpoint", "Checkpoint with C (practice)", "Hotkeys");
     // Unlock (2)
     T("unlock_icons", "Unlock all icons", "Unlock");
     T("unlock_colors", "Unlock all colors", "Unlock");
@@ -65,6 +78,7 @@ $execute {
     T("gen_steps", "Generator: step blocks", "Generator", true);
     S("gen_gap", "Generator: gap (blocks)", "Generator", 8.f, 6.f, 14.f);
     S("gen_density", "Generator: decor density %", "Generator", 40.f, 0.f, 100.f);
+    S("gen_seed", "Generator: seed (0 = random)", "Generator", 0.f, 0.f, 9999.f);
 
     for (auto& c : registry())
         cache()[c.id] = Mod::get()->getSavedValue<float>("c_" + c.id, c.def);

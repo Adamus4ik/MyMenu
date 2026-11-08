@@ -20,7 +20,8 @@ class $modify(GenEditorUI, EditorUI) {
         int segments = static_cast<int>(val("gen_len"));
         float gap = val("gen_gap") * 30.f;
         int density = static_cast<int>(val("gen_density"));
-        std::mt19937 rng(std::random_device{}());
+        unsigned seed = static_cast<unsigned>(val("gen_seed"));
+        std::mt19937 rng(seed ? seed : std::random_device{}());
         auto roll = [&](int a, int b) { return std::uniform_int_distribution<int>(a, b)(rng); };
 
         std::vector<int> kinds{0, 3};

@@ -124,6 +124,22 @@ public:
 class $modify(CCKeyboardDispatcher) {
     bool dispatchKeyboardMSG(enumKeyCodes key, bool down, bool repeat, double ts) {
         if (down && !repeat && key == KEY_Tab) { CheatMenu::toggle(); return true; }
+        if (down && !repeat && on("hotkeys_on")) {
+            auto flip = [](char const* id) { setVal(id, on(id) ? 0.f : 1.f); onCheatChanged(id); };
+            switch (key) {
+                case KEY_F1: flip("noclip"); return true;
+                case KEY_F2: flip("speed_on"); return true;
+                case KEY_F3: flip("show_hitboxes"); return true;
+                case KEY_F4: flip("autoclick"); return true;
+                default: break;
+            }
+        }
+        if (down && !repeat) {
+            if (auto pl = PlayLayer::get()) {
+                if (key == KEY_R && on("quick_restart")) { pl->resetLevel(); return true; }
+                if (key == KEY_C && on("key_checkpoint") && pl->m_isPracticeMode) { pl->createCheckpoint(); return true; }
+            }
+        }
         return CCKeyboardDispatcher::dispatchKeyboardMSG(key, down, repeat, ts);
     }
 };

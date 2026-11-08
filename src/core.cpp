@@ -3,6 +3,7 @@
 #include <Geode/modify/PlayLayer.hpp>
 #include <Geode/modify/GJBaseGameLayer.hpp>
 #include <Geode/modify/MenuLayer.hpp>
+#include <Geode/ui/Notification.hpp>
 #include <chrono>
 #include <deque>
 #include <ctime>
@@ -11,6 +12,7 @@ static std::deque<double> g_clicks;
 static int g_buffer = 0;
 static bool g_injecting = false;
 static int g_sessionDeaths = 0;
+static int g_jumps = 0;
 
 static double nowSec() {
     using namespace std::chrono;
@@ -52,6 +54,7 @@ class $modify(GJBaseGameLayer) {
     void handleButton(bool down, int button, bool p1) {
         if (down && !g_injecting) {
             g_clicks.push_back(nowSec());
+            g_jumps++;
             if (on("input_buffer") && m_player1 && !m_player1->m_isOnGround)
                 g_buffer = static_cast<int>(val("input_buffer_frames"));
         }
@@ -86,6 +89,7 @@ class $modify(MyPL, PlayLayer) {
         f->hit = f->held = false;
         f->hold = 0; f->time = 0.f;
         g_buffer = 0;
+        g_jumps = 0;
         PlayLayer::resetLevel();
     }
 
@@ -161,6 +165,17 @@ class $modify(MyPL, PlayLayer) {
         if (on("lbl_pos")) s += fmt::format("X: {:.0f} Y: {:.0f}\n", m_player1->getPositionX(), m_player1->getPositionY());
         if (on("lbl_speed")) s += fmt::format("Speed: x{:.2f}\n", on("speed_on") ? val("speed_val") : 1.f);
         if (on("lbl_session")) s += fmt::format("Session deaths: {}\n", g_sessionDeaths);
+        if (on("lbl_objects")) s += fmt::format("Objects: {}\n", m_objects ? static_cast<int>(m_objects->count()) : 0);
+        if (on("lbl_jumps")) s += fmt::format("Jumps: {}\n", g_jumps);
+        if (on("lbl_pspeed")) s += fmt::format("Player speed: {:.2f}\n", m_player1->m_playerSpeed);
+        if (on("lbl_gravity")) s += fmt::format("Gravity: {}\n", m_player1->m_isUpsideDown ? "flipped" : "normal");
+        if (on("lbl_mode")) {
+            auto* pl = m_player1;
+            char const* mode = pl->m_isShip ? "Ship" : pl->m_isBird ? "UFO" : pl->m_isBall ? "Ball" :
+                               pl->m_isDart ? "Wave" : pl->m_isRobot ? "Robot" : pl->m_isSpider ? "Spider" :
+                               pl->m_isSwing ? "Swing" : "Cube";
+            s += fmt::format("Mode: {}\n", mode);
+        }
         if (on("lbl_clock")) {
             auto t = std::time(nullptr); char b[16];
             std::strftime(b, sizeof b, "%H:%M:%S", std::localtime(&t));
@@ -188,7 +203,9 @@ class $modify(MyPL, PlayLayer) {
                 return;
             }
             // Noclip
-            if (on("noclip")) {
+            bool noclipApplies = (p == m_player2) ? on("noclip_p2") : on("noclip_p1");
+            bool solidKills = obj && obj->m_objectType == GameObjectType::Solid && on("noclip_solid_dies");
+            if (on("noclip") && noclipApplies && !solidKills) {
                 if (!f->hit) f->deaths++;
                 f->hit = true;
                 float minAcc = val("noclip_min_acc");
@@ -202,7 +219,11 @@ class $modify(MyPL, PlayLayer) {
 
     void levelComplete() {
         // Auto Safe Mode: run is treated as a test run, nothing is saved
-        if (on("safe_mode") && cheating()) m_isTestMode = true;
+        if (on("safe_mode") && cheating()) {
+            m_isTestMode = true;
+            if (on("safe_notify"))
+                Notification::create("Safe Mode: this run will not be saved", NotificationIcon::Info)->show();
+        }
         PlayLayer::levelComplete();
     }
 };

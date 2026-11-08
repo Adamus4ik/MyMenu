@@ -1,0 +1,9 @@
+{
+  "geode": "4.0.0",
+  "gd": { "mac": "2.2074" },
+  "id": "yourname.mymenu",
+  "name": "My Menu",
+  "version": "v1.0.0",
+  "developer": "yourname",
+  "description": "Mod menu opened with TAB: speed, FPS, noclip, bots, labels, generator and more"
+}

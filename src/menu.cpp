@@ -129,7 +129,6 @@ class $modify(CCKeyboardDispatcher) {
             switch (key) {
                 case KEY_F1: flip("noclip"); return true;
                 case KEY_F2: flip("speed_on"); return true;
-                case KEY_F3: flip("show_hitboxes"); return true;
                 case KEY_F4: flip("autoclick"); return true;
                 default: break;
             }

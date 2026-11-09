@@ -41,7 +41,6 @@ $execute {
     T("autohold", "Auto hold button", "Bots");
     // Visual (2)
     T("show_layout", "Show Layout", "Visual");
-    T("show_hitboxes", "Show Hitboxes", "Visual");
     // Labels (16)
     T("lbl_cheat", "CHEATS ON indicator", "Labels", true);
     T("lbl_fps", "FPS", "Labels");
@@ -65,7 +64,7 @@ $execute {
     S("lbl_scale", "Label size", "Labels", 0.4f, 0.2f, 1.f);
     S("lbl_opacity", "Label opacity", "Labels", 0.6f, 0.1f, 1.f);
     // Hotkeys (3)
-    T("hotkeys_on", "Hotkeys: F1 noclip, F2 speed, F3 hitboxes, F4 autoclick", "Hotkeys");
+    T("hotkeys_on", "Hotkeys: F1 noclip, F2 speed, F4 autoclick", "Hotkeys");
     T("quick_restart", "Quick restart with R", "Hotkeys");
     T("key_checkpoint", "Checkpoint with C (practice)", "Hotkeys");
     // Unlock (2)

@@ -113,6 +113,10 @@ class $modify(MyPL, PlayLayer) {
 
         m_player1->setVisible(!on("hide_p1"));
         if (m_player2) m_player2->setVisible(!on("hide_p2"));
+        if (on("show_layout")) {
+            for (auto o : CCArrayExt<GameObject*>(m_objects))
+                if (o->m_objectType == GameObjectType::Decoration) o->setVisible(false);
+        }
 
         // --- input logic (one action per frame) ---
         if (f->hold > 0) {

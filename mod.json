@@ -1,6 +1,8 @@
 {
   "geode": "5.11.2",
-  "gd": { "mac": "2.2081" },
+  "gd": {
+    "mac": "2.2081"
+  },
   "id": "yourname.mymenu",
   "name": "My Menu",
   "version": "v1.1.0",
